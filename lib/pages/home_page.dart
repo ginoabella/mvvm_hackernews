@@ -11,12 +11,12 @@ class HomePage extends StatelessWidget {
         title: const Text('Hacker News'),
       ),
       body: Consumer<StoryListViewModel>(
-        builder: (context, model, child) => _buildBody(model),
+        builder: (context, model, child) => _buildBody(context, model),
       ),
     );
   }
 
-  Widget _buildBody(StoryListViewModel model) {
+  Widget _buildBody(BuildContext context, StoryListViewModel model) {
     switch (model.state) {
       case Status.init:
         model.getTopStories();
@@ -25,6 +25,10 @@ class HomePage extends StatelessWidget {
         return const Center(child: CircularProgressIndicator());
       case Status.completed:
         return StoryList(stories: model.stories);
+      case Status.error:
+        return Center(
+          child: Text(model.erroDescription),
+        );
       default:
         return const Text('Error, should not reach this');
     }

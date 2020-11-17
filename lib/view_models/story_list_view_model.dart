@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hacker_news/models/story.dart';
+import 'package:hacker_news/services/error_service.dart';
 import 'package:hacker_news/services/webservice.dart';
 import 'package:hacker_news/view_models/story_view_model.dart';
 
@@ -20,10 +21,22 @@ class StoryListViewModel extends ChangeNotifier {
       notifyListeners();
     }
 
-    final Iterable results = await Webservice().getTopStories();
-    _stories =
-        results.map((story) => StoryViewModel(story: story as Story)).toList();
-    _status = Status.completed;
+    final Iterable results = await Webservice().getTopStories().catchError(
+          (e) => ErrorService.setError(
+              description: '${e.toString()}Failed retrieving Data'),
+        );
+
+    if (ErrorService.hasError(reset: true)) {
+      _status = Status.error;
+    } else {
+      _stories = results
+          .map((story) => StoryViewModel(story: story as Story))
+          .toList();
+      _status = Status.completed;
+    }
+
     notifyListeners();
   }
+
+  String erroDescription = ErrorService.errorDescription;
 }
