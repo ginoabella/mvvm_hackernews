@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
+import 'package:hacker_news/service_locator.dart';
+import 'package:hacker_news/services/data_service.dart';
 import 'package:hacker_news/services/error_service.dart';
-import 'package:hacker_news/services/webservice.dart';
 import 'package:hacker_news/view_models/comment_view_model.dart';
 import 'package:hacker_news/view_models/story_view_model.dart';
 
@@ -19,7 +20,8 @@ class CommentListViewModel extends ChangeNotifier {
     // suppress rebuild while the listeners are stilling executing rebuild.
     if (!inbuildProcess) notifyListeners();
 
-    final result = await Webservice()
+    final DataService _dataService = locator<DataService>();
+    final result = await _dataService
         .getCommentsByStory(storyVM.story)
         .catchError((e) => ErrorService.setError(description: e.toString()));
 

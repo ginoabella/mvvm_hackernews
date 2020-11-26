@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hacker_news/provider_setup.dart';
+import 'package:hacker_news/service_locator.dart';
 import 'package:hacker_news/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:hacker_news/router.dart' as router;
 
 void main() {
+  setupServiceLocator();
   runApp(App());
 }
 

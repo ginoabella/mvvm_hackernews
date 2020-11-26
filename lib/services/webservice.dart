@@ -2,10 +2,11 @@ import 'dart:convert';
 
 import 'package:hacker_news/models/comment.dart';
 import 'package:hacker_news/models/story.dart';
+import 'package:hacker_news/services/data_service.dart';
 import 'package:hacker_news/utils/constants.dart';
 import 'package:http/http.dart' as http;
 
-class Webservice {
+class Webservice implements DataService {
   Future<Story> _getStory(storyId) async {
     final url = kStoryURL.replaceFirst('STORYID', storyId.toString());
     try {
@@ -22,6 +23,7 @@ class Webservice {
     }
   }
 
+  @override
   Future<List<Story>> getTopStories() async {
     try {
       final response = await http.get(kTopStoriesURL);
@@ -38,6 +40,7 @@ class Webservice {
     }
   }
 
+  @override
   Future<List<Comment>> getCommentsByStory(Story story) async {
     try {
       return Future.wait(

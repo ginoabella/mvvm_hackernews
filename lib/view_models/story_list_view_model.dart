@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hacker_news/models/story.dart';
+import 'package:hacker_news/service_locator.dart';
+import 'package:hacker_news/services/data_service.dart';
 import 'package:hacker_news/services/error_service.dart';
-import 'package:hacker_news/services/webservice.dart';
 import 'package:hacker_news/view_models/story_view_model.dart';
 
 enum Status { init, completed, busy, empty, error }
@@ -20,8 +21,8 @@ class StoryListViewModel extends ChangeNotifier {
       // still in initializing state and will cause error if below will be executed
       notifyListeners();
     }
-
-    final Iterable results = await Webservice().getTopStories().catchError(
+    final DataService _dataService = locator<DataService>();
+    final Iterable results = await _dataService.getTopStories().catchError(
           (e) => ErrorService.setError(
               description: '${e.toString()}Failed retrieving Data'),
         );

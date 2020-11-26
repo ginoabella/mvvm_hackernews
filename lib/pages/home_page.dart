@@ -16,6 +16,17 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  // Widget _buildFuture(BuildContext context, StoryListViewModel model) {
+  //   return FutureBuilder(
+  //     future: model.getTopStories(),
+  //     builder: (context, snapshot) {
+  //       if (snapshot.hasData) {
+  //         return StoryList(stories: snapshot.data);
+  //       }
+  //     },
+  //   );
+  // }
+
   Widget _buildBody(BuildContext context, StoryListViewModel model) {
     switch (model.state) {
       case Status.init:
