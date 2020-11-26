@@ -13,13 +13,12 @@ class CommentListViewModel extends ChangeNotifier {
 
   Status get state => _status;
 
-  Future<void> getCommentByStory(StoryViewModel storyVM) async {
+  Future<void> getCommentByStory(StoryViewModel storyVM,
+      {bool inbuildProcess = false}) async {
     _status = Status.busy;
+    // suppress rebuild while the listeners are stilling executing rebuild.
+    if (!inbuildProcess) notifyListeners();
 
-    if (comments.isNotEmpty) {
-      // still in initializing state and will cause error if below will be executed
-      //notifyListeners();
-    }
     final result = await Webservice()
         .getCommentsByStory(storyVM.story)
         .catchError((e) => ErrorService.setError(description: e.toString()));
